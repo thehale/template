@@ -1,0 +1,4 @@
+[tools]
+"aqua:hashicorp/copywrite" = "latest"
+shellcheck = "latest"
+shfmt = "latest"

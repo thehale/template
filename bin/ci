@@ -25,6 +25,8 @@ function main() {
 		check "Markdown: Lint" "bin/markdownlint --fix"
 		check "License" "bin/copyright --fix"
 
+		check "Ruby: Lint" "rake rubocop:autocorrect"
+
 		# check "Category: Action" "bin/your-script"
 	else
 		check "Bash: Shebang" "filelike bash | bin/shebang '#!/usr/bin/env bash'"
@@ -41,6 +43,9 @@ function main() {
 		check "License" "bin/copyright"
 		check "Secrets" "bin/secrets #--verbose"
 		check "Dependencies" "osv-scanner scan source --recursive --allow-no-lockfiles ."
+
+		check "Ruby: Lint" "rake rubocop"
+		check "Test" "rake test"
 
 		# check "Category: Action" "bin/your-script"
 	fi

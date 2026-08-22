@@ -5,3 +5,12 @@ mise.local.toml
 mise.*.local.toml
 .mise.local.toml
 .mise.*.local.toml
+
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/

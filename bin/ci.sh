@@ -8,12 +8,12 @@ results=""
 
 function main() {
 	if [[ "${1:-}" == "--fix" ]]; then
-		check "Bash: Format" "shfmt --write bin/*"
+		check "Bash: Format" "shfmt --write bin/*.sh"
 		check "License" "bin/lawyer.sh --fix"
 	else
-		check "Bash: Syntax" "bash -n bin/*"
-		check "Bash: Lint" "shellcheck bin/*"
-		check "Bash: Format" "shfmt --diff bin/*"
+		check "Bash: Syntax" "bash -n bin/*.sh"
+		check "Bash: Lint" "shellcheck bin/*.sh"
+		check "Bash: Format" "shfmt --diff bin/*.sh"
 		check "License" "bin/lawyer.sh"
 	fi
 

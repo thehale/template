@@ -12,5 +12,7 @@ fi
 mise trust
 mise install
 
+mise exec -- bundle install
+
 bin/add-git-hooks
 bin/link-agent-config

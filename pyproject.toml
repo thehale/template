@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "package"
+dynamic = ["version"]
+description = ''
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MPL-2.0"
+keywords = []
+authors = [
+  { name = "Joseph Hale", email = "me@jhale.dev" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/thehale/package#readme"
+Issues = "https://github.com/thehale/package/issues"
+Source = "https://github.com/thehale/package"
+
+[tool.hatch.version]
+path = "src/package/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/package tests}"
+
+[tool.coverage.run]
+source_pkgs = ["package", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/package/__about__.py",
+]
+
+[tool.coverage.paths]
+package = ["src/package", "*/package/src/package"]
+tests = ["tests", "*/package/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]

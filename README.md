@@ -1,17 +1,23 @@
 <div align="center">
 
-# Template
+# Package
 
-A starting point for new projects.
+tagline...
 
 <!-- BADGES -->
-[![License: MPL-2.0](https://badgen.net/github/license/thehale/template)](https://github.com/thehale/template/blob/main/LICENSE)
+[![License: MPL-2.0](https://badgen.net/github/license/thehale/package)](https://github.com/thehale/package/blob/main/LICENSE)
 [![Sponsor thehale on GitHub](https://badgen.net/badge/icon/Sponsor/pink?icon=github&label)](https://github.com/sponsors/thehale)
 [![Joseph Hale's software engineering blog](https://jhale.dev/badges/website.svg)](https://jhale.dev)
 [![Follow Joseph Hale on LinkedIn](https://jhale.dev/badges/follow.svg)](https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=thehale)
 </div>
 
 ## Quickstart
+
+```bash
+pip install package
+```
+
+## Development
 
 ```bash
 bin/setup  # Install the tools

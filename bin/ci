@@ -25,6 +25,8 @@ function main() {
 		check "Markdown: Lint" "bin/markdownlint --fix"
 		check "License" "bin/lawyer --fix"
 
+		check "Python" "hatch check --fix"
+
 		# check "Category: Action" "bin/your-script"
 	else
 		check "Bash: Shebang" "filelike bash | bin/shebang '#!/usr/bin/env bash'"
@@ -38,6 +40,12 @@ function main() {
 		check "YAML: Format" "bin/yamlformat"
 		check "Markdown: Lint" "bin/markdownlint"
 		check "License" "bin/lawyer"
+
+		check "Python: Lint" "hatch check code"
+		check "Python: Format" "hatch check fmt"
+		check "Python: Types" "hatch check types"
+		check "Test" "hatch test --verbose --randomize --all --cover"
+		check "Build" "hatch build"
 
 		# check "Category: Action" "bin/your-script"
 	fi

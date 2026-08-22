@@ -14,5 +14,5 @@ jobs:
         git clone "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" .
         pwd
         ls -la
-        bin/setup.sh
+        . bin/setup.sh
         bin/ci.sh

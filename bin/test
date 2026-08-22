@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Copyright (c) Joseph Hale, 2026
+# SPDX-License-Identifier: MPL-2.0
+#
+# Usage: bin/test
+
+set -euo pipefail
+
+# shellcheck source=bin/lib/colors
+source "$(dirname "${BASH_SOURCE[0]}")/lib/colors"
+
+function main() {
+	for version in $(matrix); do
+		echo -e "\n $(red "===== Ruby $version =====\n")"
+		mise exec ruby@"$version" -- ruby --version
+		mise exec ruby@"$version" -- rake test
+	done
+}
+
+function matrix() {
+	mise ls ruby --local --json | jq -r ".[].requested_version"
+}
+
+main

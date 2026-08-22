@@ -42,7 +42,7 @@ function main() {
 		check "License" "bin/lawyer"
 
 		check "Ruby: Lint" "rake rubocop"
-		check "Test" "rake test"
+		check "Test" "bin/test"
 
 		# check "Category: Action" "bin/your-script"
 	fi

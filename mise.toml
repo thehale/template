@@ -1,4 +1,8 @@
 [tools]
+# Ruby Tools
+ruby = [ "3.3", "3.4", "4.0" ]
+
+# Base Tools
 "aqua:hashicorp/copywrite" = "latest"
 actionlint = "latest"
 bats = "1.14.0"

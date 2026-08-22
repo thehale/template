@@ -12,4 +12,6 @@ fi
 mise trust
 mise install
 
+mise exec -- bundle install
+
 bin/install-git-hooks

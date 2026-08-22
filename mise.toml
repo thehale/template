@@ -10,6 +10,8 @@ shfmt = "latest"
 yamlfmt = "latest"
 zizmor = "latest"
 
+ruby = [ "3.3", "3.4", "4.0" ]
+
 # your-tool = "latest"
 
 [settings]

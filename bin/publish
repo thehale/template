@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Copyright (c) Joseph Hale, 2026
+# SPDX-License-Identifier: MPL-2.0
+
+set -euo pipefail
+
+# shellcheck source=bin/lib/colors
+source "$(dirname "${BASH_SOURCE[0]}")/lib/colors"
+
+function main() {
+	if (bin/ci); then
+		echo -e "\n $(green "Tests passed, publishing...")"
+		publish
+	else
+		echo -e "\n $(red "Tests failed, aborting publish.")"
+		exit 1
+	fi
+}
+
+function publish() {
+	rm -rf dist
+	hatch build
+
+	echo -e "\nEnter your PyPI token:"
+	read -r -s token
+
+	hatch publish \
+		--user "__token__" \
+		--auth "$token"
+}
+
+main

@@ -18,6 +18,7 @@ setup() {
 
 	mkdir bin
 	passing_checks
+	stub_hatch
 
 	git add --all
 	git commit --quiet --message "Release"
@@ -33,31 +34,41 @@ passing_checks() {
 	chmod +x bin/ci
 }
 
+stub_hatch() {
+	mkdir --parents ../stubs
+	printf '#!/usr/bin/env bash\necho "hatch $*"\n' >../stubs/hatch
+	chmod +x ../stubs/hatch
+	PATH="$(cd .. && pwd)/stubs:$PATH"
+}
+
 origin_tags() {
 	git --git-dir ../origin.git tag --list
 }
 
-@test "rehearses the push when asked, leaving origin without the tag" {
+@test "builds and rehearses the push when asked, uploading nothing" {
 	git --git-dir ../origin.git tag --delete v1.0.0
 
-	run "$PUBLISH" --dry-run
+	run "$PUBLISH" --dry-run <<<"token"
 
 	[ "$status" -eq 0 ]
 	[ "$(origin_tags)" = '' ]
-	[[ "$output" == *"Rehearsing"* ]]
+	[[ "$output" == *"hatch build"* ]]
+	[[ "$output" != *"hatch publish"* ]]
 }
 
-@test "pushes the tag" {
+@test "builds, pushes the tag, then uploads" {
 	git --git-dir ../origin.git tag --delete v1.0.0
 
-	run "$PUBLISH"
+	run "$PUBLISH" <<<"token"
 
 	[ "$status" -eq 0 ]
 	[ "$(origin_tags)" = 'v1.0.0' ]
+	[[ "$output" == *"hatch build"* ]]
+	[[ "$output" == *"hatch publish"* ]]
 }
 
 @test "succeeds when origin already carries the tag" {
-	run "$PUBLISH"
+	run "$PUBLISH" <<<"token"
 
 	[ "$status" -eq 0 ]
 	[ "$(origin_tags)" = 'v1.0.0' ]

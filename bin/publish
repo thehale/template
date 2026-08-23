@@ -129,15 +129,32 @@ publish() {
 }
 
 rehearse() {
-	yellow "Rehearsing the push of $1 to origin"
+	yellow "Rehearsing $1"
+	build
 	git push --dry-run origin "refs/tags/$1"
 	green "Rehearsed $1. Run bin/publish to publish it."
 }
 
+build() {
+	rm --recursive --force dist
+	hatch build
+}
+
 perform() {
-	yellow "Pushing $1 to origin"
+	yellow "Publishing $1"
+	build
 	git push origin "refs/tags/$1"
+	upload
 	green "Published $1"
+}
+
+upload() {
+	local token
+
+	echo -e "\nEnter your PyPI token:"
+	read -r -s token
+
+	hatch publish --user "__token__" --auth "$token"
 }
 
 main "$@"

@@ -10,6 +10,7 @@ function main() {
 	if [[ "${1:-}" == "--fix" ]]; then
 		check "Bash: Shebang" "bin/bashlike | bin/shebang --fix '#!/usr/bin/env bash'"
 		check "Bash: Format" "bin/bashlike | xargs shfmt --write"
+		check "YAML: Format" "bin/yamlformat --fix"
 		check "Markdown: Lint" "bin/markdownlint --fix"
 		check "License" "bin/lawyer --fix"
 	else
@@ -20,6 +21,7 @@ function main() {
 		check "Bash: Test" "bats --recursive bin/.tests"
 		check "Actions: Lint" "actionlint"
 		check "Actions: Audit" "zizmor --quiet .github"
+		check "YAML: Format" "bin/yamlformat"
 		check "Markdown: Lint" "bin/markdownlint"
 		check "License" "bin/lawyer"
 	fi

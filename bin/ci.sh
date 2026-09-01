@@ -8,12 +8,14 @@ results=""
 
 function main() {
 	if [[ "${1:-}" == "--fix" ]]; then
-		check "Bash: Format" "shfmt --write bin/*.sh"
+		check "Bash: Shebang" "bin/bashlike.sh | bin/shebang.sh --fix '#!/usr/bin/env bash'"
+		check "Bash: Format" "bin/bashlike.sh | xargs shfmt --write"
 		check "License" "bin/lawyer.sh --fix"
 	else
-		check "Bash: Syntax" "bash -n bin/*.sh"
-		check "Bash: Lint" "shellcheck bin/*.sh"
-		check "Bash: Format" "shfmt --diff bin/*.sh"
+		check "Bash: Shebang" "bin/bashlike.sh | bin/shebang.sh '#!/usr/bin/env bash'"
+		check "Bash: Syntax" "bin/bashlike.sh | xargs -n1 bash -n"
+		check "Bash: Lint" "bin/bashlike.sh | xargs shellcheck --external-sources"
+		check "Bash: Format" "bin/bashlike.sh | xargs shfmt --diff"
 		check "License" "bin/lawyer.sh"
 	fi
 

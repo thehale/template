@@ -8,15 +8,15 @@ results=""
 
 function main() {
 	if [[ "${1:-}" == "--fix" ]]; then
-		check "Bash: Shebang" "bin/bashlike.sh | bin/shebang.sh --fix '#!/usr/bin/env bash'"
-		check "Bash: Format" "bin/bashlike.sh | xargs shfmt --write"
-		check "License" "bin/lawyer.sh --fix"
+		check "Bash: Shebang" "bin/bashlike | bin/shebang --fix '#!/usr/bin/env bash'"
+		check "Bash: Format" "bin/bashlike | xargs shfmt --write"
+		check "License" "bin/lawyer --fix"
 	else
-		check "Bash: Shebang" "bin/bashlike.sh | bin/shebang.sh '#!/usr/bin/env bash'"
-		check "Bash: Syntax" "bin/bashlike.sh | xargs -n1 bash -n"
-		check "Bash: Lint" "bin/bashlike.sh | xargs shellcheck --external-sources"
-		check "Bash: Format" "bin/bashlike.sh | xargs shfmt --diff"
-		check "License" "bin/lawyer.sh"
+		check "Bash: Shebang" "bin/bashlike | bin/shebang '#!/usr/bin/env bash'"
+		check "Bash: Syntax" "bin/bashlike | xargs -n1 bash -n"
+		check "Bash: Lint" "bin/bashlike | xargs shellcheck --external-sources"
+		check "Bash: Format" "bin/bashlike | xargs shfmt --diff"
+		check "License" "bin/lawyer"
 	fi
 
 	summarize

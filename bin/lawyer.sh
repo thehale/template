@@ -7,6 +7,12 @@ set -euo pipefail
 LICENSOR="Joseph Hale"
 LICENSE="MPL-2.0"
 YEAR="$(date +%Y)"
+CONFIG='
+schema_version = 1
+project {
+  header_ignore = ["**/vendor/**"]
+}
+'
 
 if [[ "${1:-}" == "--fix" ]]; then
 	EXTRA_ARGS=""
@@ -20,5 +26,6 @@ copywrite license "$EXTRA_ARGS" \
 	--spdx "$LICENSE"
 
 copywrite headers "$EXTRA_ARGS" \
+	--config <(echo "$CONFIG") \
 	-c "(c) $LICENSOR," \
 	--spdx "$LICENSE"

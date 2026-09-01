@@ -18,6 +18,7 @@ function main() {
 		check "Bash: Lint" "bin/bashlike | xargs shellcheck --external-sources"
 		check "Bash: Format" "bin/bashlike | xargs shfmt --diff"
 		check "Bash: Test" "bats --recursive bin/.tests"
+		check "Actions: Lint" "zizmor --quiet .github"
 		check "Markdown: Lint" "bin/markdownlint"
 		check "License" "bin/lawyer"
 	fi

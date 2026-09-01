@@ -11,3 +11,5 @@ fi
 
 mise trust
 mise install
+
+bin/install-git-hooks

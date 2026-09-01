@@ -1,5 +1,6 @@
 [tools]
 "aqua:hashicorp/copywrite" = "latest"
+actionlint = "latest"
 bats = "1.14.0"
 markdownlint-cli2 = "latest"
 shellcheck = "latest"

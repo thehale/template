@@ -16,6 +16,7 @@ function main() {
 		check "Bash: Syntax" "bin/bashlike | xargs -n1 bash -n"
 		check "Bash: Lint" "bin/bashlike | xargs shellcheck --external-sources"
 		check "Bash: Format" "bin/bashlike | xargs shfmt --diff"
+		check "Bash: Test" "bats --recursive bin/.tests"
 		check "License" "bin/lawyer"
 	fi
 

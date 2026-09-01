@@ -1,4 +1,5 @@
 [tools]
 "aqua:hashicorp/copywrite" = "latest"
+bats = "1.14.0"
 shellcheck = "latest"
 shfmt = "latest"

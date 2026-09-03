@@ -26,6 +26,7 @@ function main() {
 		check "License" "bin/lawyer --fix"
 
 		check "QML: Lint" "filelike qml | bin/qml-lint --fix"
+		check "QML: Format" "filelike qml | bin/qml-format --fix"
 
 		# check "Category: Action" "bin/your-script"
 	else
@@ -42,6 +43,7 @@ function main() {
 		check "License" "bin/lawyer"
 
 		check "QML: Lint" "filelike qml | bin/qml-lint"
+		check "QML: Format" "filelike qml | bin/qml-format"
 		check "Plugin" "bin/plugin"
 
 		# check "Category: Action" "bin/your-script"

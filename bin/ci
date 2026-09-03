@@ -23,6 +23,7 @@ function main() {
 		check "License" "bin/lawyer --fix"
 
 		check "QML: Lint" "filelike qml | bin/qml-lint --fix"
+		check "QML: Format" "filelike qml | bin/qml-format --fix"
 	else
 		check "Bash: Shebang" "filelike bash | bin/shebang '#!/usr/bin/env bash'"
 		check "Bash: Syntax" "filelike bash | xargs -n1 bash -n"
@@ -36,6 +37,7 @@ function main() {
 		check "License" "bin/lawyer"
 
 		check "QML: Lint" "filelike qml | bin/qml-lint"
+		check "QML: Format" "filelike qml | bin/qml-format"
 		check "Plugin" "bin/plugin"
 	fi
 

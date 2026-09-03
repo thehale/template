@@ -32,6 +32,8 @@ function main() {
 		check "YAML: Format" "bin/yamlformat"
 		check "Markdown: Lint" "bin/markdownlint"
 		check "License" "bin/lawyer"
+
+		check "Plugin" "bin/plugin"
 	fi
 
 	summarize "$(elapsed "$started")"

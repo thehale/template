@@ -12,6 +12,9 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib/filelike"
 results=""
 
 function main() {
+	local started
+	started="$(timestamp)"
+
 	if [[ "${1:-}" == "--fix" ]]; then
 		check "Bash: Shebang" "filelike bash | bin/shebang --fix '#!/usr/bin/env bash'"
 		check "Bash: Format" "filelike bash | xargs shfmt --write"
@@ -31,7 +34,7 @@ function main() {
 		check "License" "bin/lawyer"
 	fi
 
-	summarize
+	summarize "$(elapsed "$started")"
 }
 
 function check() {
@@ -39,21 +42,39 @@ function check() {
 	local name="$1"
 	local cmd="$2"
 
+	local started
+	started="$(timestamp)"
+
 	echo -e "\n$(yellow "==>") $(blue "$name") $(grey "$cmd")\n"
 	set +e
 	(eval "$cmd")
 	exit_code=$?
 	set -e
 
-	if [ $exit_code -ne 0 ]; then
-		results+="$(red "FAIL") $exit_code $(blue "$name") $(grey "$cmd")\n"
+	local outcome
+	if [ "$exit_code" -ne 0 ]; then
+		outcome="$(red "FAIL")"
 	else
-		results+="$(green "PASS") $exit_code $(blue "$name") $(grey "$cmd")\n"
+		outcome="$(green "PASS")"
 	fi
+	results+="$outcome $exit_code $(blue "$name") $(grey "$cmd") ($(elapsed "$started"))\n"
+}
+
+# Microseconds since the epoch
+function timestamp() {
+	local now="$EPOCHREALTIME"
+	echo "${now//[.,]/}"
+}
+
+function elapsed() {
+	local micros=$(($(timestamp) - $1))
+	printf '%d.%02ds\n' "$((micros / 1000000))" "$((micros % 1000000 / 10000))"
 }
 
 function summarize() {
-	echo -e "\n$(yellow "==> Summary <==")\n\n$results"
+	local total="$1"
+
+	echo -e "\n$(yellow "==> Summary <==")\n\n$results$(yellow "TOTAL") ($total)\n"
 	if [[ "$results" == *"FAIL"* ]]; then
 		echo "Some checks failed. Please review the summary above."
 		exit 1

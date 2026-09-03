@@ -18,7 +18,7 @@ function main() {
 		check "Bash: Syntax" "bin/bashlike | xargs -n1 bash -n"
 		check "Bash: Lint" "bin/bashlike | xargs shellcheck --external-sources"
 		check "Bash: Format" "bin/bashlike | xargs shfmt --diff"
-		check "Bash: Test" "bats --recursive bin/.tests"
+		check "Bash: Test" "bats --recursive bin"
 		check "Actions: Lint" "actionlint"
 		check "Actions: Audit" "zizmor --quiet .github"
 		check "YAML: Format" "bin/yamlformat"

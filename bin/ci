@@ -8,6 +8,8 @@ set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib/colors"
 # shellcheck source=bin/lib/filelike
 source "$(dirname "${BASH_SOURCE[0]}")/lib/filelike"
+# shellcheck source=bin/lib/timing
+source "$(dirname "${BASH_SOURCE[0]}")/lib/timing"
 
 results=""
 
@@ -58,17 +60,6 @@ function check() {
 		outcome="$(green "PASS")"
 	fi
 	results+="$outcome $exit_code $(blue "$name") $(grey "$cmd") ($(elapsed "$started"))\n"
-}
-
-# Microseconds since the epoch
-function timestamp() {
-	local now="$EPOCHREALTIME"
-	echo "${now//[.,]/}"
-}
-
-function elapsed() {
-	local micros=$(($(timestamp) - $1))
-	printf '%d.%02ds\n' "$((micros / 1000000))" "$((micros % 1000000 / 10000))"
 }
 
 function summarize() {

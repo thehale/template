@@ -4,20 +4,23 @@
 
 set -euo pipefail
 
+# shellcheck source=bin/lib/filelike
+source "$(dirname "${BASH_SOURCE[0]}")/lib/filelike"
+
 results=""
 
 function main() {
 	if [[ "${1:-}" == "--fix" ]]; then
-		check "Bash: Shebang" "bin/bashlike | bin/shebang --fix '#!/usr/bin/env bash'"
-		check "Bash: Format" "bin/bashlike | xargs shfmt --write"
+		check "Bash: Shebang" "filelike bash | bin/shebang --fix '#!/usr/bin/env bash'"
+		check "Bash: Format" "filelike bash | xargs shfmt --write"
 		check "YAML: Format" "bin/yamlformat --fix"
 		check "Markdown: Lint" "bin/markdownlint --fix"
 		check "License" "bin/lawyer --fix"
 	else
-		check "Bash: Shebang" "bin/bashlike | bin/shebang '#!/usr/bin/env bash'"
-		check "Bash: Syntax" "bin/bashlike | xargs -n1 bash -n"
-		check "Bash: Lint" "bin/bashlike | xargs shellcheck --external-sources"
-		check "Bash: Format" "bin/bashlike | xargs shfmt --diff"
+		check "Bash: Shebang" "filelike bash | bin/shebang '#!/usr/bin/env bash'"
+		check "Bash: Syntax" "filelike bash | xargs -n1 bash -n"
+		check "Bash: Lint" "filelike bash | xargs shellcheck --external-sources"
+		check "Bash: Format" "filelike bash | xargs shfmt --diff"
 		check "Bash: Test" "bats --recursive bin"
 		check "Actions: Lint" "actionlint"
 		check "Actions: Audit" "zizmor --quiet .github"

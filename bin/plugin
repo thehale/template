@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Copyright (c) Joseph Hale, 2026
+# SPDX-License-Identifier: MPL-2.0
+#
+# Usage: bin/plugin
+
+set -euo pipefail
+
+if ! command -v omarchy >/dev/null; then
+	echo "omarchy not installed, skipping"
+	exit 0
+fi
+
+omarchy plugin validate .

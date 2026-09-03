@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+# shellcheck source=bin/lib/colors
+source "$(dirname "${BASH_SOURCE[0]}")/lib/colors"
 # shellcheck source=bin/lib/filelike
 source "$(dirname "${BASH_SOURCE[0]}")/lib/filelike"
 
@@ -59,26 +61,6 @@ function summarize() {
 		echo "All checks passed successfully!"
 		exit 0
 	fi
-}
-
-function green() {
-	echo -e "\033[32m$1\033[0m"
-}
-
-function red() {
-	echo -e "\033[31m$1\033[0m"
-}
-
-function yellow() {
-	echo -e "\033[33m$1\033[0m"
-}
-
-function blue() {
-	echo -e "\033[34m$1\033[0m"
-}
-
-function grey() {
-	echo -e "\033[90m$1\033[0m"
 }
 
 main "$@"

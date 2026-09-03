@@ -21,6 +21,8 @@ function main() {
 		check "YAML: Format" "bin/yamlformat --fix"
 		check "Markdown: Lint" "bin/markdownlint --fix"
 		check "License" "bin/lawyer --fix"
+
+		check "QML: Lint" "filelike qml | bin/qml-lint --fix"
 	else
 		check "Bash: Shebang" "filelike bash | bin/shebang '#!/usr/bin/env bash'"
 		check "Bash: Syntax" "filelike bash | xargs -n1 bash -n"
@@ -33,6 +35,7 @@ function main() {
 		check "Markdown: Lint" "bin/markdownlint"
 		check "License" "bin/lawyer"
 
+		check "QML: Lint" "filelike qml | bin/qml-lint"
 		check "Plugin" "bin/plugin"
 	fi
 

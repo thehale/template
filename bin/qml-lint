@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Copyright (c) Joseph Hale, 2026
+# SPDX-License-Identifier: MPL-2.0
+#
+# Usage: filelike qml | bin/qml-lint [--fix]
+
+set -euo pipefail
+
+# `disable`s exist to ignore the `qs.*` modules Quickshell supplies at runtime.
+if [[ "${1:-}" == "--fix" ]]; then
+	xargs --no-run-if-empty --delimiter='\n' \
+		pyside6-qmllint --import disable --unqualified disable --fix
+else
+	xargs --no-run-if-empty --delimiter='\n' \
+		pyside6-qmllint --import disable --unqualified disable
+fi

@@ -7,3 +7,6 @@ shellcheck = "latest"
 shfmt = "latest"
 yamlfmt = "latest"
 zizmor = "latest"
+
+"pipx:PySide6-Essentials" = "latest" # Bundles the Qt tools: qmlformat, qmllint
+uv = "latest"                        # Installs the pipx-backed tools above

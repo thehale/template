@@ -20,6 +20,7 @@ function main() {
 	if [[ "${1:-}" == "--fix" ]]; then
 		check "Bash: Shebang" "filelike bash | bin/shebang --fix '#!/usr/bin/env bash'"
 		check "Bash: Format" "filelike bash | xargs shfmt --write"
+		check "Bash: Order" "filelike bash | bashorder check --fix"
 		check "YAML: Format" "bin/yamlformat --fix"
 		check "Markdown: Lint" "bin/markdownlint --fix"
 		check "License" "bin/lawyer --fix"
@@ -28,6 +29,7 @@ function main() {
 		check "Bash: Syntax" "filelike bash | xargs -n1 bash -n"
 		check "Bash: Lint" "filelike bash | xargs shellcheck --external-sources"
 		check "Bash: Format" "filelike bash | xargs shfmt --diff"
+		check "Bash: Order" "filelike bash | bashorder check"
 		check "Bash: Test" "bats --recursive bin"
 		check "Actions: Lint" "actionlint"
 		check "Actions: Audit" "zizmor --quiet .github"

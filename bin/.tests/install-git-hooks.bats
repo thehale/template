@@ -5,6 +5,8 @@
 setup() {
 	REPO="$(cd "$BATS_TEST_DIRNAME/../.." && pwd)"
 
+	unset "${!GIT_@}"
+
 	cd "${BATS_TEST_TMPDIR:?}"
 }
 

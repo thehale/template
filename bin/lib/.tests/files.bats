@@ -7,6 +7,8 @@ bats_require_minimum_version 1.5.0
 setup() {
 	FILES="$BATS_TEST_DIRNAME/../files"
 
+	unset "${!GIT_@}"
+
 	cd "${BATS_TEST_TMPDIR:?}"
 	git init --quiet .
 }

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Copyright (c) Joseph Hale, 2026
+# SPDX-License-Identifier: MPL-2.0
+#
+# Usage: bin/plugin
+
+set -euo pipefail
+
+EXPORT_DIR=""
+
+main() {
+	if ! command -v omarchy >/dev/null; then
+		echo "omarchy not installed, skipping"
+		exit 0
+	fi
+
+	trap cleanup EXIT
+	omarchy plugin validate "$(versioned_tree)"
+}
+
+versioned_tree() {
+	EXPORT_DIR="$(mktemp --directory)"
+	git ls-files --cached --others --exclude-standard -z |
+		tar --create --null --files-from=- |
+		tar --extract --directory "$EXPORT_DIR"
+	echo "$EXPORT_DIR"
+}
+
+cleanup() {
+	if [[ -n "$EXPORT_DIR" ]]; then
+		rm --recursive --force "$EXPORT_DIR"
+	fi
+}
+
+main "$@"

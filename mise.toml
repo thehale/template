@@ -12,4 +12,7 @@ shfmt = "3.13.1"
 yamlfmt = "0.21.0"
 zizmor = "1.30.0"
 
+"pipx:PySide6-Essentials" = "6.11.2" # Bundles the Qt tools: qmlformat, qmllint
+uv = "0.12.15"                       # Installs the pipx-backed tools above
+
 # your-tool = "1.0.0"

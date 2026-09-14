@@ -10,6 +10,8 @@ shfmt = "latest"
 yamlfmt = "latest"
 zizmor = "latest"
 
+# your-tool = "latest"
+
 [settings]
 # TODO: Drop once bashorder v0.1.0 is old enough for the default gate.
 minimum_release_age_excludes = ["github:thehale/bashorder"]

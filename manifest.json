@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "thehale.plugin",
+  "name": "Plugin",
+  "version": "0.0.1",
+  "author": "Joseph Hale",
+  "description": "tagline...",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Widget.qml"
+  },
+  "barWidget": {
+    "displayName": "Plugin",
+    "description": "tagline...",
+    "category": "Info",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

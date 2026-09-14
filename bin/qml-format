@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Copyright (c) Joseph Hale, 2026
+# SPDX-License-Identifier: MPL-2.0
+#
+# Usage: filelike qml | bin/qml-format [--fix]
+
+set -euo pipefail
+
+main() {
+	local unformatted_files
+	unformatted_files="$(find_unformatted_files "$@")"
+
+	if [[ -n "$unformatted_files" ]]; then
+		echo -e "\nNot formatted; rerun with --fix:\n$unformatted_files" >&2
+		exit 1
+	fi
+}
+
+find_unformatted_files() {
+	local file
+
+	while IFS= read -r file; do
+		if [[ "${1:-}" == "--fix" ]]; then
+			pyside6-qmlformat --inplace --indent-width 2 "$file" || echo "  $file"
+		else
+			check "$file" || echo "  $file"
+		fi
+	done
+}
+
+# qmlformat has no check mode, so compare what it would write to what is
+# there. The diff goes to stderr, leaving stdout to name the offenders.
+check() {
+	local file="$1"
+	pyside6-qmlformat --indent-width 2 "$file" | diff --unified "$file" - >&2
+}
+
+main "$@"

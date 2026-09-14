@@ -1,11 +1,11 @@
 <div align="center">
 
-# Template
+# Plugin
 
-A starting point for new projects.
+tagline...
 
 <!-- BADGES -->
-[![License: MPL-2.0](https://badgen.net/github/license/thehale/template)](https://github.com/thehale/template/blob/main/LICENSE)
+[![License: MPL-2.0](https://badgen.net/github/license/thehale/plugin)](https://github.com/thehale/plugin/blob/main/LICENSE)
 [![Sponsor thehale on GitHub](https://badgen.net/badge/icon/Sponsor/pink?icon=github&label)](https://github.com/sponsors/thehale)
 [![Joseph Hale's software engineering blog](https://jhale.dev/badges/website.svg)](https://jhale.dev)
 [![Follow Joseph Hale on LinkedIn](https://jhale.dev/badges/follow.svg)](https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=thehale)
@@ -14,10 +14,25 @@ A starting point for new projects.
 ## Quickstart
 
 ```bash
+omarchy plugin add https://github.com/thehale/plugin.git --enable
+```
+
+Plugins run as unsandboxed code inside the long-lived `omarchy-shell`
+process, so read the source before you enable one.
+
+## Development
+
+```bash
 bin/setup  # Install the tools
 bin/ci     # Run the checks
 bin/ci --fix  # Fix what can be fixed automatically
 ```
+
+This template ships the `bar-widget` kind, the most common of the six:
+
+- [Develop a plugin](https://plugins.omarchy.org/develop.html)
+- [Publish a plugin](https://plugins.omarchy.org/publish.html)
+- [Shell plugins, in the Omarchy manual](https://omarchy.org/manual/shell-plugins/)
 
 ## License
 

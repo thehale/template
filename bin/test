@@ -13,7 +13,7 @@ function main() {
 	for version in $(matrix); do
 		echo -e "\n $(red "===== Ruby $version =====\n")"
 		mise exec ruby@"$version" -- ruby --version
-		mise exec ruby@"$version" -- ruby -Itest -e 'Dir["test/test_*.rb"].sort.each { |file| require File.expand_path(file) }'
+		mise exec ruby@"$version" -- rake test
 	done
 }
 

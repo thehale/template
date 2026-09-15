@@ -12,6 +12,8 @@ fi
 mise trust
 mise install
 
-mise exec -- bundle install
+for version in $(mise ls ruby --local --json | jq -r ".[].requested_version"); do
+	mise exec ruby@"$version" -- bundle install
+done
 
 bin/install-git-hooks

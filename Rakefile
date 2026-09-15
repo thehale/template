@@ -5,8 +5,13 @@ require "minitest/test_task"
 
 Minitest::TestTask.create
 
-require "rubocop/rake_task"
-
-RuboCop::RakeTask.new
+begin
+  require "rubocop/rake_task"
+  RuboCop::RakeTask.new
+rescue LoadError
+  task :rubocop do
+    sh "bundle exec rubocop"
+  end
+end
 
 task default: %i[test rubocop]

@@ -10,8 +10,6 @@ PATHS=(
 	".github"
 )
 
-# yamlfmt strips every blank line by default, which collapses a workflow into
-# an unreadable wall. Keep the blank lines that separate blocks.
 CONFIG='
 formatter:
   type: basic

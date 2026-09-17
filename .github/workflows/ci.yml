@@ -23,7 +23,9 @@ jobs:
           path: |
             ~/.local/share/mise/installs
             ~/.cache/mise
-          key: mise-${{ runner.os }}-${{ hashFiles('mise.toml') }}
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: mise-${{ runner.os }}-${{ hashFiles('mise.toml', 'go.sum') }}
           restore-keys: |
             mise-${{ runner.os }}-
 

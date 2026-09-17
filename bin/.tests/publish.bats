@@ -70,6 +70,7 @@ origin_tags() {
 
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"CI publishes nothing"* ]]
+	[[ "$output" != *"    "* ]]
 }
 
 @test "refuses an argument it does not take" {
@@ -77,6 +78,7 @@ origin_tags() {
 
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"--dry-run"* ]]
+	[[ "$output" == *"    bin/publish --dry-run"* ]]
 }
 
 @test "refuses a checkout whose checks fail" {
@@ -86,6 +88,7 @@ origin_tags() {
 
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"bin/ci failed"* ]]
+	[[ "$output" == *"    bin/ci --fix  # NOTE: not every problem is autofixable"* ]]
 }
 
 @test "refuses a branch that is not main" {
@@ -95,6 +98,7 @@ origin_tags() {
 
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"A release is published from main"* ]]
+	[[ "$output" == *"    git switch main"* ]]
 }
 
 @test "refuses a dirty working tree" {
@@ -104,6 +108,7 @@ origin_tags() {
 
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"working tree has changes"* ]]
+	[[ "$output" == *"    git add . && git stash"* ]]
 }
 
 @test "refuses a commit carrying no release tag" {
@@ -113,6 +118,7 @@ origin_tags() {
 
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"no vX.Y.Z tag"* ]]
+	[[ "$output" == *"    git tag vX.Y.Z"* ]]
 }
 
 @test "refuses a branch origin has never seen" {
@@ -122,6 +128,7 @@ origin_tags() {
 
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"origin has no main"* ]]
+	[[ "$output" == *"    git push origin main"* ]]
 }
 
 @test "refuses a branch origin knows at another commit" {
@@ -132,6 +139,7 @@ origin_tags() {
 
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"origin/main is a different commit"* ]]
+	[[ "$output" == *"    git push origin main"* ]]
 }
 
 @test "refuses a tag origin disagrees about" {
@@ -142,5 +150,6 @@ origin_tags() {
 
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"already carries a different v1.0.0"* ]]
+	[[ "$output" == *"    git ls-remote origin refs/tags/v1.0.0"* ]]
 	[ "$(origin_tags)" = 'v1.0.0' ]
 }

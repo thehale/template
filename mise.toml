@@ -16,4 +16,8 @@ shfmt = "3.13.1"
 yamlfmt = "0.21.0"
 zizmor = "1.30.0"
 
+go = "1.26.8"
+"aqua:golangci/golangci-lint" = "2.13.2"
+"go:golang.org/x/tools/gopls" = "0.23.0"
+
 # your-tool = "1.0.0"

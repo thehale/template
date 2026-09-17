@@ -25,6 +25,9 @@ function main() {
 		check "Markdown: Lint" "bin/markdownlint --fix"
 		check "License" "bin/copyright --fix"
 
+		check "Go: Format" "bin/goformat --fix"
+		check "Go: Lint" "golangci-lint run --fix"
+
 		# check "Category: Action" "bin/your-script"
 	else
 		check "Bash: Shebang" "filelike bash | bin/shebang '#!/usr/bin/env bash'"
@@ -41,6 +44,12 @@ function main() {
 		check "License" "bin/copyright"
 		check "Secrets" "bin/secrets #--verbose"
 		check "Dependencies" "osv-scanner scan source --recursive --allow-no-lockfiles ."
+
+		check "Go: Format" "bin/goformat"
+		check "Go: Vet" "go vet ./..."
+		check "Go: Diagnostics" "bin/godiagnostics"
+		check "Go: Lint" "golangci-lint run"
+		check "Test" "go test -race -cover ./..."
 
 		# check "Category: Action" "bin/your-script"
 	fi

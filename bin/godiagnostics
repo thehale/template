@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Copyright (c) 2026 Joseph Hale
+# SPDX-License-Identifier: MPL-2.0
+
+# Usage: bin/godiagnostics
+
+set -euo pipefail
+
+# shellcheck source=bin/lib/filelike
+source "$(dirname "${BASH_SOURCE[0]}")/lib/filelike"
+
+main() {
+	local diagnostics
+	diagnostics="$(filelike go | xargs -r gopls check)"
+
+	if [[ -n "$diagnostics" ]]; then
+		refuse "$diagnostics"
+	fi
+}
+
+refuse() {
+	echo "gopls reports:" >&2
+	echo "$1" >&2
+	exit 1
+}
+
+main "$@"

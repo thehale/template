@@ -20,8 +20,10 @@ main() {
 	confirm_branch
 	confirm_clean_tree
 	confirm_release_tag
+	confirm_declared_module
 	confirm_pushed_branch
 	confirm_remote_tag
+	confirm_github_access
 	publish
 }
 
@@ -87,6 +89,29 @@ release_tag() {
 	git tag --points-at HEAD | grep --extended-regexp "$RELEASE_TAG" | head --lines 1 || true
 }
 
+confirm_declared_module() {
+	local declared serving
+	declared="$(module_path)"
+	serving="$(origin_path)"
+
+	if [[ "$declared" != "$serving" ]]; then
+		refuse "go.mod declares $declared, but origin serves $serving. go install would fetch somebody else's code." \
+			"go mod edit -module $serving"
+	fi
+}
+
+module_path() {
+	sed --quiet --regexp-extended 's%^module (.*)$%\1%p' go.mod
+}
+
+origin_path() {
+	local url
+	url="$(git remote get-url origin)"
+	url="${url%.git}"
+	url="${url#*://}"
+	echo "${url#*@}" | tr ':' '/'
+}
+
 confirm_pushed_branch() {
 	local pushed
 	pushed="$(remote_object "refs/heads/$BRANCH")"
@@ -117,6 +142,13 @@ confirm_remote_tag() {
 	fi
 }
 
+confirm_github_access() {
+	if [[ -z "${GITHUB_TOKEN:-}" ]] && ! gh auth status &>/dev/null; then
+		refuse "Nothing here can reach GitHub, and that is where the binaries go." \
+			"gh auth login"
+	fi
+}
+
 publish() {
 	local tag
 	tag="$(release_tag)"
@@ -129,14 +161,16 @@ publish() {
 }
 
 rehearse() {
-	yellow "Rehearsing the push of $1 to origin"
+	yellow "Rehearsing the release of $1"
 	git push --dry-run origin "refs/tags/$1"
+	goreleaser release --clean --skip=publish
 	green "Rehearsed $1. Run bin/publish to publish it."
 }
 
 perform() {
-	yellow "Pushing $1 to origin"
+	yellow "Releasing $1"
 	git push origin "refs/tags/$1"
+	GITHUB_TOKEN="${GITHUB_TOKEN:-$(gh auth token)}" goreleaser release --clean
 	green "Published $1"
 }
 

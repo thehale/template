@@ -14,5 +14,6 @@ zizmor = "1.30.0"
 
 go = "1.26.8"
 "aqua:golangci/golangci-lint" = "2.13.2"
+"aqua:goreleaser/goreleaser" = "2.18.1"
 
 # your-tool = "1.0.0"

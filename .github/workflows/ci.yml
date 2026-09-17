@@ -23,7 +23,9 @@ jobs:
           path: |
             ~/.local/share/mise/installs
             ~/.cache/mise
-          key: mise-${{ runner.os }}-${{ hashFiles('mise.toml') }}
+            ~/.cache/uv
+            ~/.local/share/hatch
+          key: mise-${{ runner.os }}-${{ hashFiles('mise.toml', 'pyproject.toml') }}
           restore-keys: |
             mise-${{ runner.os }}-
 

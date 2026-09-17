@@ -8,6 +8,7 @@ setup() {
 
 	unset "${!GIT_@}"
 	unset CI
+	unset GITHUB_TOKEN
 
 	cd "${BATS_TEST_TMPDIR:?}"
 
@@ -18,6 +19,8 @@ setup() {
 
 	mkdir bin
 	passing_checks
+	stub_release_tools
+	matching_module
 
 	git add --all
 	git commit --quiet --message "Release"
@@ -33,27 +36,55 @@ passing_checks() {
 	chmod +x bin/ci
 }
 
+matching_module() {
+	printf 'module %s\n\ngo 1.26.8\n' "../origin" >go.mod
+}
+
+stub_release_tools() {
+	mkdir --parents ../stubs
+	stub goreleaser 'echo "goreleaser $*"'
+	stub gh 'echo "gh $*"'
+	PATH="$(cd .. && pwd)/stubs:$PATH"
+}
+
+stub() {
+	printf '#!/usr/bin/env bash\n%s\n' "$2" >"../stubs/$1"
+	chmod +x "../stubs/$1"
+}
+
 origin_tags() {
 	git --git-dir ../origin.git tag --list
 }
 
-@test "rehearses the push when asked, leaving origin without the tag" {
+@test "builds the binaries when asked to rehearse, uploading nothing" {
 	git --git-dir ../origin.git tag --delete v1.0.0
 
 	run "$PUBLISH" --dry-run
 
 	[ "$status" -eq 0 ]
 	[ "$(origin_tags)" = '' ]
-	[[ "$output" == *"Rehearsing"* ]]
+	[[ "$output" == *"goreleaser release --clean --skip=publish"* ]]
 }
 
-@test "pushes the tag" {
+@test "pushes the tag, then uploads the binaries" {
 	git --git-dir ../origin.git tag --delete v1.0.0
 
 	run "$PUBLISH"
 
 	[ "$status" -eq 0 ]
 	[ "$(origin_tags)" = 'v1.0.0' ]
+	[[ "$output" == *"goreleaser release --clean"* ]]
+	[[ "$output" != *"--skip=publish"* ]]
+}
+
+@test "refuses a workstation that cannot reach GitHub" {
+	stub gh 'exit 1'
+
+	run "$PUBLISH"
+
+	[ "$status" -eq 1 ]
+	[[ "$output" == *"Nothing here can reach GitHub"* ]]
+	[[ "$output" == *"    gh auth login"* ]]
 }
 
 @test "succeeds when origin already carries the tag" {
@@ -119,6 +150,16 @@ origin_tags() {
 	[ "$status" -eq 1 ]
 	[[ "$output" == *"no vX.Y.Z tag"* ]]
 	[[ "$output" == *"    git tag vX.Y.Z"* ]]
+}
+
+@test "refuses a module path that points away from origin" {
+	git remote set-url origin https://github.com/someone/else
+
+	run "$PUBLISH"
+
+	[ "$status" -eq 1 ]
+	[[ "$output" == *"origin serves github.com/someone/else"* ]]
+	[[ "$output" == *"    go mod edit -module github.com/someone/else"* ]]
 }
 
 @test "refuses a branch origin has never seen" {

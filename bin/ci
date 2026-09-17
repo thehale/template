@@ -25,6 +25,8 @@ function main() {
 		check "Markdown: Lint" "bin/markdownlint --fix"
 		check "License" "bin/lawyer --fix"
 
+		check "Rust: Format" "cargo fmt"
+
 		# check "Category: Action" "bin/your-script"
 	else
 		check "Bash: Shebang" "filelike bash | bin/shebang '#!/usr/bin/env bash'"
@@ -40,6 +42,11 @@ function main() {
 		check "License" "bin/lawyer"
 		check "Secrets" "bin/secrets #--verbose"
 		check "Dependencies" "osv-scanner scan source --recursive --allow-no-lockfiles ."
+
+		check "Rust: Format" "cargo fmt --check"
+		check "Rust: Lint" "cargo clippy --all-targets -- --deny warnings"
+		check "Rust: Test" "cargo test"
+		check "Rust: Build" "cargo build --release"
 
 		# check "Category: Action" "bin/your-script"
 	fi

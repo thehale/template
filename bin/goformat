@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Copyright (c) Joseph Hale, 2026
+# SPDX-License-Identifier: MPL-2.0
+#
+# Usage: bin/goformat [--fix]
+
+set -euo pipefail
+
+main() {
+	if [[ "${1:-}" == "--fix" ]]; then
+		gofmt -w .
+	else
+		check
+	fi
+}
+
+check() {
+	local unformatted
+	unformatted="$(gofmt -l .)"
+
+	if [[ -n "$unformatted" ]]; then
+		refuse "$unformatted"
+	fi
+}
+
+refuse() {
+	echo "Not formatted with gofmt:" >&2
+	echo "$1" >&2
+	exit 1
+}
+
+main "$@"

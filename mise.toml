@@ -3,6 +3,7 @@
 "github:thehale/bashorder" = "latest"
 actionlint = "latest"
 bats = "1.14.0"
+gitleaks = "latest"
 jq = "latest"
 markdownlint-cli2 = "latest"
 shellcheck = "latest"

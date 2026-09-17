@@ -1,31 +1,65 @@
 #!/usr/bin/env bash
 # Copyright (c) Joseph Hale, 2026
 # SPDX-License-Identifier: MPL-2.0
+#
+# Usage: bin/lawyer [--fix]
 
 set -euo pipefail
 
 LICENSOR="Joseph Hale"
 LICENSE="MPL-2.0"
 YEAR="$(date +%Y)"
-CONFIG='
-schema_version = 1
-project {
-  header_ignore = ["**/vendor/**"]
+
+CONFIG_DIR=""
+
+main() {
+	trap cleanup EXIT
+	write_config
+
+	local plan="--plan"
+	if [[ "${1:-}" == "--fix" ]]; then
+		plan=""
+	fi
+
+	copywrite license "$plan" \
+		-c "(c) $LICENSOR," \
+		--year "$YEAR" \
+		--spdx "$LICENSE"
+
+	copywrite headers "$plan" \
+		--config "$CONFIG_DIR/.copywrite.hcl" \
+		-c "(c) $LICENSOR," \
+		--spdx "$LICENSE"
 }
-'
 
-if [[ "${1:-}" == "--fix" ]]; then
-	EXTRA_ARGS=""
-else
-	EXTRA_ARGS="--plan"
-fi
+write_config() {
+	CONFIG_DIR="$(mktemp --directory)"
+	{
+		echo 'schema_version = 1'
+		echo 'project {'
+		echo '  header_ignore = ['
+		unversioned_globs | sed 's/^/    /'
+		echo '  ]'
+		echo '}'
+	} >"$CONFIG_DIR/.copywrite.hcl"
+}
 
-copywrite license "$EXTRA_ARGS" \
-	-c "(c) $LICENSOR," \
-	--year "$YEAR" \
-	--spdx "$LICENSE"
+unversioned_globs() {
+	echo '"**/vendor/**",'
+	list_unversioned | while IFS= read -r path; do
+		echo "\"${path%/}/**\","
+		echo "\"${path%/}\","
+	done
+}
 
-copywrite headers "$EXTRA_ARGS" \
-	--config <(echo "$CONFIG") \
-	-c "(c) $LICENSOR," \
-	--spdx "$LICENSE"
+list_unversioned() {
+	git ls-files --others --ignored --exclude-standard --directory 2>/dev/null || true
+}
+
+cleanup() {
+	if [[ -n "$CONFIG_DIR" ]]; then
+		rm --recursive --force "$CONFIG_DIR"
+	fi
+}
+
+main "$@"

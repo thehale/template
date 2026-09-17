@@ -41,6 +41,8 @@ Accept `--fix` when the tool can fix what it reports.
 
 ## Tests
 
-Cover the script with a bats suite at `bin/.tests/<script>.bats`. The suites
-run from `BATS_TEST_TMPDIR`, so a test builds whatever files or repository it
-needs and leaves this one alone. `bin/ci` runs them as the `Bash: Test` check.
+A script with logic of its own gets a bats suite at `bin/.tests/<script>.bats`.
+A wrapper that writes a config and hands off to its tool does not, since the
+suite would be testing the tool. The suites run from `BATS_TEST_TMPDIR`, so a
+test builds whatever files or repository it needs and leaves this one alone.
+`bin/ci` runs them as the `Bash: Test` check.

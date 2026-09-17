@@ -129,14 +129,17 @@ publish() {
 }
 
 rehearse() {
-	yellow "Rehearsing the push of $1 to origin"
+	yellow "Rehearsing $1"
+	cargo publish --dry-run
 	git push --dry-run origin "refs/tags/$1"
 	green "Rehearsed $1. Run bin/publish to publish it."
 }
 
 perform() {
-	yellow "Pushing $1 to origin"
+	yellow "Publishing $1"
+	cargo publish --dry-run
 	git push origin "refs/tags/$1"
+	cargo publish
 	green "Published $1"
 }
 

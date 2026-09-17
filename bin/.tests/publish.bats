@@ -18,6 +18,7 @@ setup() {
 
 	mkdir bin
 	passing_checks
+	stub_cargo
 
 	git add --all
 	git commit --quiet --message "Release"
@@ -33,27 +34,39 @@ passing_checks() {
 	chmod +x bin/ci
 }
 
+stub_cargo() {
+	mkdir --parents ../stubs
+	printf '#!/usr/bin/env bash\necho "cargo $*"\n' >../stubs/cargo
+	chmod +x ../stubs/cargo
+	PATH="$(cd .. && pwd)/stubs:$PATH"
+}
+
+cargo_calls() {
+	grep "^cargo " <<<"$output" || true
+}
+
 origin_tags() {
 	git --git-dir ../origin.git tag --list
 }
 
-@test "rehearses the push when asked, leaving origin without the tag" {
+@test "packages and rehearses the push when asked, uploading nothing" {
 	git --git-dir ../origin.git tag --delete v1.0.0
 
 	run "$PUBLISH" --dry-run
 
 	[ "$status" -eq 0 ]
 	[ "$(origin_tags)" = '' ]
-	[[ "$output" == *"Rehearsing"* ]]
+	[ "$(cargo_calls)" = 'cargo publish --dry-run' ]
 }
 
-@test "pushes the tag" {
+@test "packages, pushes the tag, then uploads" {
 	git --git-dir ../origin.git tag --delete v1.0.0
 
 	run "$PUBLISH"
 
 	[ "$status" -eq 0 ]
 	[ "$(origin_tags)" = 'v1.0.0' ]
+	[ "$(cargo_calls)" = $'cargo publish --dry-run\ncargo publish' ]
 }
 
 @test "succeeds when origin already carries the tag" {

@@ -23,7 +23,10 @@ jobs:
           path: |
             ~/.local/share/mise/installs
             ~/.cache/mise
-          key: mise-${{ runner.os }}-${{ hashFiles('mise.toml') }}
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: mise-${{ runner.os }}-${{ hashFiles('mise.toml', 'Cargo.lock') }}
           restore-keys: |
             mise-${{ runner.os }}-
 

@@ -28,6 +28,8 @@ jobs:
             mise-${{ runner.os }}-
 
       - name: Setup
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bin/setup
           echo "$HOME/.local/share/mise/bin" >> "$GITHUB_PATH"

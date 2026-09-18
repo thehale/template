@@ -37,11 +37,11 @@ fix_shebangs() {
 }
 
 find_wrong_shebangs() {
-	xargs --no-run-if-empty sed --separate --quiet "1 { /^#!/ { \%^$1\$% ! F } }"
+	xargs -r sed --separate --quiet "1 { /^#!/ { \%^$1\$% ! F } }"
 }
 
 rewrite_shebangs() {
-	xargs --no-run-if-empty sed --in-place "1 s%.*%$1%"
+	xargs -r sed --in-place "1 s%.*%$1%"
 }
 
 report_shebangs() {

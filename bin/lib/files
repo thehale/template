@@ -70,7 +70,7 @@ select_by_extension() {
 
 	local pattern
 	pattern="$(printf '%s|' "${EXTENSIONS[@]}")"
-	sed --regexp-extended --quiet "/\\.(${pattern%|})$/ p"
+	sed -n -E "/\\.(${pattern%|})$/ p"
 }
 
 select_by_shebang() {
@@ -86,7 +86,7 @@ select_by_shebang() {
 omit_excluded_paths() {
 	local pattern
 	pattern="$(printf '(^|/)%s/|' "${EXCLUDED_DIRECTORIES[@]}")"
-	sed --regexp-extended "\%${pattern%|}%d"
+	sed -E "\%${pattern%|}%d"
 }
 
 main "$@"

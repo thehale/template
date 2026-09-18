@@ -33,7 +33,7 @@ main() {
 }
 
 write_config() {
-	CONFIG_DIR="$(mktemp --directory)"
+	CONFIG_DIR="$(mktemp -d)"
 	{
 		echo 'schema_version = 1'
 		echo 'project {'
@@ -58,7 +58,7 @@ list_unversioned() {
 
 cleanup() {
 	if [[ -n "$CONFIG_DIR" ]]; then
-		rm --recursive --force "$CONFIG_DIR"
+		rm -rf "$CONFIG_DIR"
 	fi
 }
 

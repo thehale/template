@@ -57,6 +57,15 @@ setup() {
 	[ "$(head -1 wrong.sh)" = "$WANTED" ]
 }
 
+@test "--fix keeps the file executable" {
+	chmod +x wrong.sh
+
+	run "$REPO/bin/shebang" --fix "$WANTED" <<<"wrong.sh"
+
+	[ "$status" -eq 0 ]
+	[ -x wrong.sh ]
+}
+
 @test "--fix leaves the rest of the file alone" {
 	"$REPO/bin/shebang" --fix "$WANTED" <<<"wrong.sh"
 

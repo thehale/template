@@ -13,7 +13,8 @@ when it is something a person runs by hand.
 
 ## Steps
 
-1. Add the tool to `mise.toml`, where the commented example sits.
+1. Add the tool to `mise.toml`, where the commented example sits, and run
+   `mise lock` to record its checksums in `mise.lock`.
 2. Add a `check` line to each list in `bin/ci`: the gating command under the
    `else` branch, and the fixing command under `--fix` if the tool can fix
    what it finds. Name it `"Category: Action"`, matching the ones already

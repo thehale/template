@@ -10,7 +10,7 @@ if ! command -v mise &>/dev/null; then
 fi
 
 mise trust
-mise install
+MISE_LOCKED_SCOPES=project mise install --locked
 
 bin/add-git-hooks
 bin/link-agent-config

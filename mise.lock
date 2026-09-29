@@ -99,6 +99,59 @@ url_api = "https://api.github.com/repos/bats-core/bats-core/tarball/v1.14.0"
 url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.14.0.tar.gz"
 url_api = "https://api.github.com/repos/bats-core/bats-core/tarball/v1.14.0"
 
+[[tools."github:google/osv-scanner"]]
+version = "2.6.0"
+backend = "github:google/osv-scanner"
+specifiers = ["2.6.0"]
+
+[tools."github:google/osv-scanner"."platforms.linux-arm64"]
+checksum = "sha256:2c71403eb443d05891c4f268c3ad771cf4f16e5443463fd7851ef8f454d3c7e4"
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_linux_arm64"
+url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414650"
+
+[tools."github:google/osv-scanner"."platforms.linux-arm64".provenance.slsa]
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
+
+[tools."github:google/osv-scanner"."platforms.linux-x64"]
+checksum = "sha256:ca69b3d3cd08f889a49dc0a383122f71cc528b83803671df5fd874d97485b108"
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_linux_amd64"
+url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414718"
+
+[tools."github:google/osv-scanner"."platforms.linux-x64".provenance.slsa]
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
+
+[tools."github:google/osv-scanner"."platforms.macos-arm64"]
+checksum = "sha256:98c460dcd37de25819babd757d04542045b6243113e209edcd4d89fedb0256b4"
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_darwin_arm64"
+url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414648"
+
+[tools."github:google/osv-scanner"."platforms.macos-arm64".provenance.slsa]
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
+
+[tools."github:google/osv-scanner"."platforms.macos-x64"]
+checksum = "sha256:60c5296637e977b28eeda5c7f13573e447659a632922737f94d11fa7e30ad6ca"
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_darwin_amd64"
+url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414712"
+
+[tools."github:google/osv-scanner"."platforms.macos-x64".provenance.slsa]
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
+
+[tools."github:google/osv-scanner"."platforms.windows-arm64"]
+checksum = "sha256:ca1379da0e408279ef2c85cde0846a903495738a91c7b065a208048437c1686c"
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_windows_arm64.exe"
+url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414651"
+
+[tools."github:google/osv-scanner"."platforms.windows-arm64".provenance.slsa]
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
+
+[tools."github:google/osv-scanner"."platforms.windows-x64"]
+checksum = "sha256:e0ed7644118b717b028c249ee9d3515024e55e8510747ca08906eb96765354d6"
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_windows_amd64.exe"
+url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414649"
+
+[tools."github:google/osv-scanner"."platforms.windows-x64".provenance.slsa]
+url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
+
 [[tools."github:thehale/bashorder"]]
 version = "0.1.0"
 backend = "github:thehale/bashorder"
@@ -244,59 +297,6 @@ url = "https://nodejs.org/dist/v26.9.0/node-v26.9.0-win-arm64.zip"
 [tools.node."platforms.windows-x64"]
 checksum = "sha256:c8af870b5b3e9789a6cbdb30270e7c212e12d76a7afa7fc7f21b6b21cc22a71b"
 url = "https://nodejs.org/dist/v26.9.0/node-v26.9.0-win-x64.zip"
-
-[[tools.osv-scanner]]
-version = "2.6.0"
-backend = "aqua:google/osv-scanner"
-specifiers = ["2.6.0"]
-
-[tools.osv-scanner."platforms.linux-arm64"]
-checksum = "sha256:2c71403eb443d05891c4f268c3ad771cf4f16e5443463fd7851ef8f454d3c7e4"
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_linux_arm64"
-url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414650"
-
-[tools.osv-scanner."platforms.linux-arm64".provenance.slsa]
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
-
-[tools.osv-scanner."platforms.linux-x64"]
-checksum = "sha256:ca69b3d3cd08f889a49dc0a383122f71cc528b83803671df5fd874d97485b108"
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_linux_amd64"
-url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414718"
-
-[tools.osv-scanner."platforms.linux-x64".provenance.slsa]
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
-
-[tools.osv-scanner."platforms.macos-arm64"]
-checksum = "sha256:98c460dcd37de25819babd757d04542045b6243113e209edcd4d89fedb0256b4"
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_darwin_arm64"
-url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414648"
-
-[tools.osv-scanner."platforms.macos-arm64".provenance.slsa]
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
-
-[tools.osv-scanner."platforms.macos-x64"]
-checksum = "sha256:60c5296637e977b28eeda5c7f13573e447659a632922737f94d11fa7e30ad6ca"
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_darwin_amd64"
-url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414712"
-
-[tools.osv-scanner."platforms.macos-x64".provenance.slsa]
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
-
-[tools.osv-scanner."platforms.windows-arm64"]
-checksum = "sha256:ca1379da0e408279ef2c85cde0846a903495738a91c7b065a208048437c1686c"
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_windows_arm64.exe"
-url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414651"
-
-[tools.osv-scanner."platforms.windows-arm64".provenance.slsa]
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
-
-[tools.osv-scanner."platforms.windows-x64"]
-checksum = "sha256:e0ed7644118b717b028c249ee9d3515024e55e8510747ca08906eb96765354d6"
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_windows_amd64.exe"
-url_api = "https://api.github.com/repos/google/osv-scanner/releases/assets/562414649"
-
-[tools.osv-scanner."platforms.windows-x64".provenance.slsa]
-url = "https://github.com/google/osv-scanner/releases/download/v2.6.0/multiple.intoto.jsonl"
 
 [[tools.shellcheck]]
 version = "0.11.0"

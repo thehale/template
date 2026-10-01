@@ -58,7 +58,7 @@ rewrite_shebangs() {
 rewrite_first_line() {
 	local rest
 	rest="$(tail -n +2 "$1")"
-	printf '%s\n%s\n' "$2" "$rest" >"$1"
+	printf '%s\n' "$2" ${rest:+"$rest"} >"$1"
 }
 
 report_shebangs() {

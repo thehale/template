@@ -46,7 +46,6 @@ write_config() {
 
 unversioned_globs() {
 	echo '"**/vendor/**",'
-	echo '".mise/locks/**",'
 	list_unversioned | while IFS= read -r path; do
 		echo "\"${path%/}/**\","
 		echo "\"${path%/}\","

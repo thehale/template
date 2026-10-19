@@ -41,6 +41,7 @@ function main() {
 		check "License" "bin/copyright"
 		check "Secrets" "bin/secrets #--verbose"
 		check "Dependencies" "osv-scanner scan source --recursive --allow-no-lockfiles ."
+		check "Init: Scaffold" "bin/.init/scaffold"
 
 		# check "Category: Action" "bin/your-script"
 	fi

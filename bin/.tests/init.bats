@@ -159,7 +159,6 @@ EOF
 
 	[ ! -e bin/init ]
 	[ ! -e bin/.tests/init.bats ]
-	[ ! -e .github/workflows/init.yml ]
 }
 
 @test "commits everything it generated" {
@@ -200,9 +199,8 @@ From template commit $template" ]
 	[[ "$output" == *"Usage"* ]]
 }
 
-@test "leaves the files it rewrites passing their checks" {
-	"$PWD/bin/init" --name widget --owner "Acme Corp" --repository https://gitlab.com/acme/widget --license MIT
+@test "removes its check from bin/ci" {
+	"$PWD/bin/init" --name widget
 
-	bin/copyright
-	bin/markdownlint
+	! grep -q 'bin/\.init/' bin/ci
 }

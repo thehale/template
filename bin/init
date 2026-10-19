@@ -219,7 +219,8 @@ write_license_section() {
 }
 
 remove_initializer() {
-	rm -rf bin/init bin/.tests/init.bats .github/workflows/init.yml bin/.init
+	rewrite bin/ci '!/bin\/\.init\//'
+	rm -rf bin/init bin/.tests/init.bats bin/.init
 }
 
 commit() {

@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Copyright (c) 2026 Joseph Hale
+# SPDX-License-Identifier: MPL-2.0
+
+# Usage: bin/.init/scaffold
+
+set -euo pipefail
+
+PROJECT=""
+
+main() {
+	trap cleanup EXIT
+	copy_working_tree
+	cd "$PROJECT"
+	commit_template
+	start_project
+}
+
+copy_working_tree() {
+	PROJECT="$(mktemp -d)"
+	export MISE_TRUSTED_CONFIG_PATHS="$PROJECT"
+	cd "$(dirname "${BASH_SOURCE[0]}")/../.."
+	git ls-files -z --cached --others --exclude-standard |
+		rsync --archive --from0 --files-from=- --ignore-missing-args . "$PROJECT/"
+}
+
+commit_template() {
+	configure_identity
+	git init --quiet
+	git add --all
+	git commit --quiet --message "Template"
+}
+
+configure_identity() {
+	export GIT_AUTHOR_NAME=Init GIT_AUTHOR_EMAIL=init@example.com
+	export GIT_COMMITTER_NAME=Init GIT_COMMITTER_EMAIL=init@example.com
+}
+
+start_project() {
+	bin/init --name example --owner "Joseph Hale"
+	bin/ci
+}
+
+cleanup() {
+	if [[ -n "$PROJECT" ]]; then
+		rm -rf "$PROJECT"
+	fi
+}
+
+main "$@"

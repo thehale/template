@@ -20,6 +20,7 @@ A starting point for new projects.
 
 ```bash
 bin/setup  # Install the tools
+bin/init --name my-package  # Start a package named my-package
 bin/ci     # Run the checks
 bin/ci --fix  # Fix what can be fixed automatically
 ```

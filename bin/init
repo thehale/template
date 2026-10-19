@@ -1,0 +1,231 @@
+#!/usr/bin/env bash
+# Copyright (c) 2026 Joseph Hale
+# SPDX-License-Identifier: MPL-2.0
+
+# Usage: bin/init [--name NAME] [--owner OWNER] [--repository URL] [--license SPDX-ID]
+
+set -euo pipefail
+
+# shellcheck source=bin/lib/colors
+source "$(dirname "${BASH_SOURCE[0]}")/lib/colors"
+
+main() {
+	cd "$(dirname "${BASH_SOURCE[0]}")/.."
+	parse_arguments "$@"
+	confirm_owner
+	confirm_license
+	confirm_clean_tree
+	generate
+	commit
+}
+
+parse_arguments() {
+	NAME="$(basename "$PWD")"
+	OWNER="$(git config user.name || true)"
+	REPOSITORY=""
+	LICENSE="MPL-2.0"
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--name)
+			NAME="${2:?}"
+			shift 2
+			;;
+		--owner)
+			OWNER="${2:?}"
+			shift 2
+			;;
+		--repository)
+			REPOSITORY="${2:?}"
+			shift 2
+			;;
+		--license)
+			LICENSE="${2:?}"
+			shift 2
+			;;
+		*)
+			refuse "Usage: bin/init [--name NAME] [--owner OWNER] [--repository URL] [--license SPDX-ID]"
+			;;
+		esac
+	done
+
+	REPOSITORY="${REPOSITORY:-$(default_repository)}"
+}
+
+refuse() {
+	red "$1" >&2
+
+	if [[ $# -gt 1 ]]; then
+		echo >&2
+		blue "    $2" >&2
+		echo >&2
+	fi
+
+	exit 1
+}
+
+default_repository() {
+	local origin
+	origin="$(origin_repository)"
+
+	if [[ -n "$origin" ]]; then
+		echo "$origin"
+	else
+		echo "https://github.com/$(default_github_username)/$NAME"
+	fi
+}
+
+origin_repository() {
+	if git remote get-url origin &>/dev/null; then
+		local url
+		url="$(https_url "$(git remote get-url origin)")"
+
+		if [[ "${url##*/}" == "$NAME" ]]; then
+			echo "$url"
+		fi
+	fi
+}
+
+https_url() {
+	local url="${1%.git}"
+
+	case "$url" in
+	git@*)
+		url="${url#git@}"
+		echo "https://${url/:/\/}"
+		;;
+	*)
+		echo "$url"
+		;;
+	esac
+}
+
+default_github_username() {
+	local user
+	user="$(gh config get user -h github.com 2>/dev/null || true)"
+	echo "${user:-thehale}"
+}
+
+confirm_owner() {
+	if [[ -z "$OWNER" ]]; then
+		refuse "No owner to put in the copyright headers." \
+			"bin/init --owner \"Your Name\""
+	fi
+}
+
+confirm_license() {
+	if ! lawyer licenses | grep -qx "$LICENSE"; then
+		refuse "$LICENSE is not a license lawyer knows." \
+			"lawyer licenses"
+	fi
+}
+
+confirm_clean_tree() {
+	if [[ -n "$(git status --porcelain)" ]]; then
+		refuse "The working tree has changes. The scaffolding commit must hold only the scaffolding." \
+			"git add . && git commit"
+	fi
+}
+
+generate() {
+	run_package_step
+	activate_init_lines
+	write_identity
+	bin/copyright --fix
+	remove_initializer
+}
+
+run_package_step() {
+	if [[ -x bin/.init/package ]]; then
+		PACKAGE_NAME="$NAME" PACKAGE_OWNER="$OWNER" PACKAGE_REPOSITORY="$REPOSITORY" PACKAGE_LICENSE="$LICENSE" \
+			bin/.init/package
+	fi
+}
+
+activate_init_lines() {
+	local file
+	while IFS= read -r file; do
+		rewrite "$file" '/^[ \t]*# init: / { sub(/# init: /, "") } { print }'
+	done < <(git grep -lE '^[[:space:]]*# init: ')
+}
+
+rewrite() {
+	local file="$1"
+	shift
+
+	awk "$@" "$file" >"$file.new"
+	cat "$file.new" >"$file"
+	rm "$file.new"
+}
+
+write_identity() {
+	write_readme
+	write_license_section
+	rewrite bin/copyright -v owner="$OWNER" -v license="$LICENSE" '
+		{ sub(/--copyright-owner "[^"]*"/, "--copyright-owner \"" owner "\"") }
+		{ sub(/--license [^ ]+/, "--license " license) }
+		{ print }
+	'
+}
+
+write_readme() {
+	rewrite README.md \
+		-v title="$(upper_first "$NAME")" \
+		-v year="$(date +%Y)" \
+		-v owner="$OWNER" \
+		-v host="$(repository_host)" \
+		-v path="$(repository_path)" \
+		-v license="$LICENSE" '
+		/^# Template$/ { print "# " title; next }
+		/^A starting point for new projects\.$/ { print "tagline..."; next }
+		/^bin\/init --name my-package  # Start a package named my-package$/ { next }
+		/badgen\.net\/github\/license\// && host != "github.com" { next }
+		/badgen\.net\/github\/license\// { gsub(/thehale\/template/, path); gsub(/License: MPL-2\.0/, "License: " license) }
+		/^Copyright \(c\) [0-9]+ .*, All Rights Reserved$/ { print "Copyright (c) " year " " owner ", All Rights Reserved"; next }
+		{ print }
+	'
+}
+
+upper_first() {
+	local first
+	first="$(printf '%s' "$1" | cut -c1 | tr '[:lower:]' '[:upper:]')"
+	printf '%s%s' "$first" "${1#?}"
+}
+
+repository_host() {
+	local url="${REPOSITORY#*://}"
+	echo "${url%%/*}"
+}
+
+repository_path() {
+	local url="${REPOSITORY#*://}"
+	echo "${url#*/}"
+}
+
+write_license_section() {
+	if [[ "$LICENSE" != "MPL-2.0" ]]; then
+		rewrite README.md -v year="$(date +%Y)" -v owner="$OWNER" -v license="$LICENSE" '
+			/^## License$/ {
+				print "## License"
+				print ""
+				print "Copyright (c) " year " " owner ", All Rights Reserved"
+				print ""
+				print "Provided under the terms of the [" license "](./LICENSE) license."
+				exit
+			}
+			{ print }
+		'
+	fi
+}
+
+remove_initializer() {
+	rm -rf bin/init bin/.tests/init.bats .github/workflows/init.yml bin/.init
+}
+
+commit() {
+	git add --all
+	git commit --quiet --message "Scaffold $NAME" --message "From template commit $(git rev-parse HEAD)"
+	green "Started $NAME."
+}
+
+main "$@"

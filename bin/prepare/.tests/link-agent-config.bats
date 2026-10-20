@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MPL-2.0
 
 setup() {
-	REPO="$(cd "$BATS_TEST_DIRNAME/../.." && pwd)"
+	REPO="$(cd "$BATS_TEST_DIRNAME/../../.." && pwd)"
 
 	cd "${BATS_TEST_TMPDIR:?}"
 
@@ -13,7 +13,7 @@ setup() {
 }
 
 @test "links the places Claude Code looks at the committed config" {
-	run "$REPO/bin/link-agent-config"
+	run "$REPO/bin/prepare/link-agent-config"
 
 	[ "$status" -eq 0 ]
 	[ "$(readlink CLAUDE.md)" = 'AGENTS.md' ]
@@ -21,16 +21,16 @@ setup() {
 }
 
 @test "serves the committed files through the links" {
-	"$REPO/bin/link-agent-config"
+	"$REPO/bin/prepare/link-agent-config"
 
 	[ "$(cat CLAUDE.md)" = 'conventions' ]
 	[ "$(cat .claude/skills/example/SKILL.md)" = 'a skill' ]
 }
 
 @test "says nothing the second time" {
-	"$REPO/bin/link-agent-config"
+	"$REPO/bin/prepare/link-agent-config"
 
-	run "$REPO/bin/link-agent-config"
+	run "$REPO/bin/prepare/link-agent-config"
 
 	[ "$status" -eq 0 ]
 	[ "$output" = '' ]
@@ -40,7 +40,7 @@ setup() {
 	mkdir .claude
 	echo '{}' >.claude/settings.local.json
 
-	run "$REPO/bin/link-agent-config"
+	run "$REPO/bin/prepare/link-agent-config"
 
 	[ "$status" -eq 0 ]
 	[ "$(readlink .claude/skills)" = '../.agents/skills' ]
@@ -50,7 +50,7 @@ setup() {
 @test "leaves a real file where a link would go alone" {
 	echo "mine" >CLAUDE.md
 
-	run "$REPO/bin/link-agent-config"
+	run "$REPO/bin/prepare/link-agent-config"
 
 	[ "$status" -eq 0 ]
 	[ "$(cat CLAUDE.md)" = 'mine' ]
@@ -60,7 +60,7 @@ setup() {
 @test "leaves a link pointing somewhere else alone" {
 	ln --symbolic elsewhere.md CLAUDE.md
 
-	run "$REPO/bin/link-agent-config"
+	run "$REPO/bin/prepare/link-agent-config"
 
 	[ "$status" -eq 0 ]
 	[ "$(readlink CLAUDE.md)" = 'elsewhere.md' ]

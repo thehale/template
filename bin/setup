@@ -12,5 +12,5 @@ fi
 mise trust
 mise install
 
-bin/add-git-hooks
-bin/link-agent-config
+bin/prepare/add-git-hooks
+bin/prepare/link-agent-config

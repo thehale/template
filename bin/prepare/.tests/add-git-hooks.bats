@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MPL-2.0
 
 setup() {
-	REPO="$(cd "$BATS_TEST_DIRNAME/../.." && pwd)"
+	REPO="$(cd "$BATS_TEST_DIRNAME/../../.." && pwd)"
 
 	unset "${!GIT_@}"
 
@@ -13,7 +13,7 @@ setup() {
 @test "points git at the hooks in bin/.hooks" {
 	git init --quiet .
 
-	run "$REPO/bin/add-git-hooks"
+	run "$REPO/bin/prepare/add-git-hooks"
 
 	[ "$status" -eq 0 ]
 	[ "$(git config core.hooksPath)" = 'bin/.hooks' ]
@@ -23,7 +23,7 @@ setup() {
 	mkdir plain
 	cd plain
 
-	run "$REPO/bin/add-git-hooks"
+	run "$REPO/bin/prepare/add-git-hooks"
 
 	[ "$status" -eq 0 ]
 	[[ "$output" == *"Not a git repository"* ]]

@@ -7,7 +7,7 @@ bats_require_minimum_version 1.5.0
 WANTED='#!/usr/bin/env bash'
 
 setup() {
-	REPO="$(cd "$BATS_TEST_DIRNAME/../.." && pwd)"
+	SHEBANG="$BATS_TEST_DIRNAME/../shebang"
 	cd "${BATS_TEST_TMPDIR:?}"
 
 	printf '%s\necho right\n' "$WANTED" >right.sh
@@ -16,13 +16,13 @@ setup() {
 }
 
 @test "passes a file whose shebang matches" {
-	run "$REPO/bin/shebang" "$WANTED" <<<"right.sh"
+	run "$SHEBANG" "$WANTED" <<<"right.sh"
 
 	[ "$status" -eq 0 ]
 }
 
 @test "fails and names the offender on stderr" {
-	run --separate-stderr "$REPO/bin/shebang" "$WANTED" <<<"wrong.sh"
+	run --separate-stderr "$SHEBANG" "$WANTED" <<<"wrong.sh"
 
 	[ "$status" -eq 1 ]
 	[[ "$stderr" == *"wrong.sh"* ]]
@@ -31,7 +31,7 @@ setup() {
 @test "reports every offender, not just the first" {
 	printf '#!/bin/zsh\n' >alsowrong.sh
 
-	run --separate-stderr "$REPO/bin/shebang" "$WANTED" <<<"$(printf 'wrong.sh\nalsowrong.sh\n')"
+	run --separate-stderr "$SHEBANG" "$WANTED" <<<"$(printf 'wrong.sh\nalsowrong.sh\n')"
 
 	[ "$status" -eq 1 ]
 	[[ "$stderr" == *"wrong.sh"* ]]
@@ -39,19 +39,19 @@ setup() {
 }
 
 @test "ignores a file with no shebang at all" {
-	run "$REPO/bin/shebang" "$WANTED" <<<"bare.sh"
+	run "$SHEBANG" "$WANTED" <<<"bare.sh"
 
 	[ "$status" -eq 0 ]
 }
 
 @test "accepts empty stdin" {
-	run "$REPO/bin/shebang" "$WANTED" </dev/null
+	run "$SHEBANG" "$WANTED" </dev/null
 
 	[ "$status" -eq 0 ]
 }
 
 @test "--fix rewrites a wrong shebang in place" {
-	run "$REPO/bin/shebang" --fix "$WANTED" <<<"wrong.sh"
+	run "$SHEBANG" --fix "$WANTED" <<<"wrong.sh"
 
 	[ "$status" -eq 0 ]
 	[ "$(head -1 wrong.sh)" = "$WANTED" ]
@@ -60,14 +60,14 @@ setup() {
 @test "--fix keeps the file executable" {
 	chmod +x wrong.sh
 
-	run "$REPO/bin/shebang" --fix "$WANTED" <<<"wrong.sh"
+	run "$SHEBANG" --fix "$WANTED" <<<"wrong.sh"
 
 	[ "$status" -eq 0 ]
 	[ -x wrong.sh ]
 }
 
 @test "--fix leaves the rest of the file alone" {
-	"$REPO/bin/shebang" --fix "$WANTED" <<<"wrong.sh"
+	"$SHEBANG" --fix "$WANTED" <<<"wrong.sh"
 
 	[ "$(sed -n '2 p' wrong.sh)" = 'echo wrong' ]
 	[ "$(wc -l <wrong.sh)" -eq 2 ]
@@ -76,20 +76,20 @@ setup() {
 @test "--fix adds no blank line to a file that is only a shebang" {
 	printf '#!/bin/sh\n' >only.sh
 
-	"$REPO/bin/shebang" --fix "$WANTED" <<<"only.sh"
+	"$SHEBANG" --fix "$WANTED" <<<"only.sh"
 
 	[ "$(cat only.sh)" = "$WANTED" ]
 	[ "$(wc -l <only.sh)" -eq 1 ]
 }
 
 @test "--fix does not add a shebang to a file without one" {
-	"$REPO/bin/shebang" --fix "$WANTED" <<<"bare.sh"
+	"$SHEBANG" --fix "$WANTED" <<<"bare.sh"
 
 	[ "$(head -1 bare.sh)" = 'echo bare' ]
 }
 
 @test "exits with usage when given no shebang" {
-	run --separate-stderr "$REPO/bin/shebang" </dev/null
+	run --separate-stderr "$SHEBANG" </dev/null
 
 	[ "$status" -eq 1 ]
 	[[ "$stderr" == *"Usage:"* ]]

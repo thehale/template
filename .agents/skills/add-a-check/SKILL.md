@@ -25,7 +25,8 @@ when it is something a person runs by hand.
 3. Run `bin/ci` and read the summary.
 
 A one-line command can sit inline in `bin/ci`. Anything that needs a config
-file, a file list, or more than one pipeline gets its own script under `bin/`.
+file, a file list, or more than one pipeline gets its own script under
+`bin/check/`.
 
 ## A check with its own script
 
@@ -33,7 +34,7 @@ Name the script for the job, not for the tool it calls. A script that shares
 its tool's name can take that name on PATH and call itself instead, and the
 symptom is a hang rather than an error.
 
-Follow `bin/markdownlint` for a check that carries configuration. It writes
+Follow `bin/check/markdownlint` for a check that carries configuration. It writes
 the config to a temporary directory, passes it to the tool, and removes it on
 exit, so no dotfile lands in a repository built from this template.
 
@@ -45,7 +46,8 @@ Accept `--fix` when the tool can fix what it reports.
 
 ## Tests
 
-A script with logic of its own gets a bats suite at `bin/.tests/<script>.bats`.
+A script with logic of its own gets a bats suite at
+`bin/check/.tests/<script>.bats`.
 A wrapper that writes a config and hands off to its tool does not, since the
 suite would be testing the tool. The suites run from `BATS_TEST_TMPDIR`, so a
 test builds whatever files or repository it needs and leaves this one alone.

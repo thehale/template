@@ -2,12 +2,12 @@
 # Copyright (c) 2026 Joseph Hale
 # SPDX-License-Identifier: MPL-2.0
 
-# Usage: bin/markdownlint [--fix]
+# Usage: bin/check/markdownlint [--fix]
 
 set -euo pipefail
 
 # shellcheck source=bin/lib/filelike
-source "$(dirname "${BASH_SOURCE[0]}")/lib/filelike"
+source "$(dirname "${BASH_SOURCE[0]}")/../lib/filelike"
 
 CONFIG='
 # no-inline-html

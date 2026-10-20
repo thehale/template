@@ -106,14 +106,14 @@ stub_gh() {
 @test "sets the owner" {
 	"$PWD/bin/init" --name widget --owner "Acme Corp"
 
-	grep -q -- '--copyright-owner "Acme Corp"' bin/copyright
+	grep -q -- '--copyright-owner "Acme Corp"' bin/check/copyright
 	grep -q '^Copyright (c) [0-9]\{4\} Acme Corp, All Rights Reserved$' README.md
 }
 
 @test "accepts a different license" {
 	"$PWD/bin/init" --name widget --license MIT
 
-	grep -q -- '--license MIT' bin/copyright
+	grep -q -- '--license MIT' bin/check/copyright
 	[ "$(head -n 1 LICENSE)" = 'MIT License' ]
 }
 

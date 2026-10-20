@@ -2,7 +2,7 @@
 # Copyright (c) 2026 Joseph Hale
 # SPDX-License-Identifier: MPL-2.0
 
-# Usage: bin/yamlformat [--fix]
+# Usage: bin/check/yamlformat [--fix]
 
 set -euo pipefail
 

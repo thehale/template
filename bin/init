@@ -131,7 +131,7 @@ generate() {
 	run_package_step
 	activate_init_lines
 	write_identity
-	bin/copyright --fix
+	bin/check/copyright --fix
 	remove_initializer
 }
 
@@ -161,7 +161,7 @@ rewrite() {
 write_identity() {
 	write_readme
 	write_license_section
-	rewrite bin/copyright -v owner="$OWNER" -v license="$LICENSE" '
+	rewrite bin/check/copyright -v owner="$OWNER" -v license="$LICENSE" '
 		{ sub(/--copyright-owner "[^"]*"/, "--copyright-owner \"" owner "\"") }
 		{ sub(/--license [^ ]+/, "--license " license) }
 		{ print }

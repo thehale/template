@@ -2,7 +2,7 @@
 # Copyright (c) 2026 Joseph Hale
 # SPDX-License-Identifier: MPL-2.0
 
-# Usage: filelike bash | bin/shebang [--fix] '#!/usr/bin/env bash'
+# Usage: filelike bash | bin/check/shebang [--fix] '#!/usr/bin/env bash'
 
 set -euo pipefail
 
@@ -28,7 +28,7 @@ main() {
 }
 
 usage() {
-	echo "Usage: filelike bash | bin/shebang [--fix] '<shebang>'" >&2
+	echo "Usage: filelike bash | bin/check/shebang [--fix] '<shebang>'" >&2
 	exit 1
 }
 
